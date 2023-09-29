@@ -4,7 +4,7 @@ import axios from "axios";
 export default {
   name: "movieCard",
   props: {
-    movie: Object,
+    results: Object,
   },
 
   data() {
@@ -39,6 +39,11 @@ export default {
         return "src/assets/img/1497554326-multiple-flags_84867.png";
       }
     },
+
+    check404(img_url) {
+      if (img_url === null) {
+      }
+    },
   },
 };
 </script>
@@ -46,14 +51,14 @@ export default {
 <template>
   <div class="col">
     <div class="card rounded">
-      <img class="img-fluid poster" :src="img_url + movie.poster_path" alt="" />
+      <img class="img-fluid poster" :src="img_url + results.poster" alt="" />
       <div class="card-text text-start pt-5 ps-2">
-        <h5>Titolo: {{ movie.title }}</h5>
-        <h5>Titolo originale: {{ movie.original_title }}</h5>
-        <p>Media di voti: {{ movie.vote_average }}</p>
+        <h5>Titolo: {{ results.title }}</h5>
+        <h5>Titolo originale: {{ results.o_title }}</h5>
+        <p>Media di voti: {{ results.vote }}</p>
         <p>
           Lingua Originale:
-          <img class="flag pb-3" :src="getFlag_img(movie.original_language)" />
+          <img class="flag pb-3" :src="getFlag_img(results.language)" />
         </p>
       </div>
     </div>
