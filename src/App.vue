@@ -10,30 +10,51 @@ export default {
       state,
       api_url:
         "https://api.themoviedb.org/3/search/movie?api_key=3251d53895cc1c147c63e0202c2fe26d&query=",
+
+      api_url_tv:
+        "https://api.themoviedb.org/3/search/tv?api_key=3251d53895cc1c147c63e0202c2fe26d&query=",
+      searchedThing: "",
     };
   },
 
   methods: {
-    callApi(urlMovie) {
+    callApi(input, isMovie) {
+      let url = "";
+      if (isMovie == true) {
+        url = this.api_url;
+      } else {
+        url = this.api_url_tv;
+      }
+      console.log(url);
       axios
-        .get(this.api_url + urlMovie)
+        .get(url + input)
+
         .then((resp) => {
-          this.state.movies = resp.data.results;
-          console.log(resp.data.results);
+          if (isMovie) {
+            this.state.addToResult(resp.data.results, true);
+            // this.state.movies = resp.data.results;
+            // console.log(this.state.movies);
+          } else {
+            this.state.addToResult(resp.data.results, false);
+            // this.state.series = resp.data.results;
+            // console.log(this.state.series);
+          }
         })
-        .catch((err) => {
-          console.error(err.message);
-          this.state.errorMessage = err.message;
+        .catch((error) => {
+          console.log(error);
         });
     },
 
     Search() {
-      let urlMovie = this.state.searchInput;
+      let input = this.state.searchInput;
 
-      if (urlMovie != "") {
-        console.log(urlMovie);
+      if (input != "") {
+        // console.log(input);
 
-        this.callApi(urlMovie);
+        this.callApi(input, true);
+
+        this.callApi(input, false);
+        // this.state.createResults();
       } else {
         console.log("OPS: c'e' statro un problema!");
       }
@@ -55,7 +76,10 @@ export default {
       </div>
 
       <div class="row row-cols-2 row-cols-md-4 g-4 my-5">
-        <movieCard v-for="movie in state.movies" :movie="movie"></movieCard>
+        <movieCard
+          v-for="result in state.results"
+          :results="result"
+        ></movieCard>
       </div>
     </div>
   </body>
