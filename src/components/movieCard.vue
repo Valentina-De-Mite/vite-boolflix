@@ -72,15 +72,15 @@ export default {
 </script>
 
 <template>
-  <div class="col">
-    <div class="card rounded">
+  <div class="col mb-4">
+    <div class="card rounded bg-dark text-light">
       <img class="img-fluid poster" :src="img_url + results.poster" alt="" />
       <div class="card-text text-start pt-5 ps-2">
         <h5>Titolo: {{ results.title }}</h5>
         <h5>Titolo originale: {{ results.o_title }}</h5>
-        <p>Media di voti: {{ results.vote }}</p>
-        <div v-html="starHTML"></div>
-
+        <div>
+          <h6>Voto: <span v-html="starHTML"></span></h6>
+        </div>
         <p>
           Lingua Originale:
           <img class="flag pb-3" :src="getFlag_img(results.language)" />
@@ -102,6 +102,9 @@ export default {
   width: 15%;
 }
 
+.bgc-dark {
+  background-color: rgb(28, 28, 28);
+}
 svg {
   fill: #fff71a;
 }

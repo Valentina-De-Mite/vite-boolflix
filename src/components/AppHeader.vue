@@ -1,6 +1,62 @@
 <script>
+import { state } from "../state.js";
+import axios from "axios";
 export default {
   name: "AppHeader",
+
+  data() {
+    return {
+      state,
+      api_url:
+        "https://api.themoviedb.org/3/search/movie?api_key=3251d53895cc1c147c63e0202c2fe26d&query=",
+
+      api_url_tv:
+        "https://api.themoviedb.org/3/search/tv?api_key=3251d53895cc1c147c63e0202c2fe26d&query=",
+    };
+  },
+
+  methods: {
+    callApi(input, isMovie) {
+      let url = "";
+      if (isMovie == true) {
+        url = this.api_url;
+      } else {
+        url = this.api_url_tv;
+      }
+      console.log(url);
+      axios
+        .get(url + input)
+
+        .then((resp) => {
+          if (isMovie) {
+            this.state.addToResult(resp.data.results, true);
+            // this.state.movies = resp.data.results;
+            // console.log(this.state.movies);
+          } else {
+            this.state.addToResult(resp.data.results, false);
+            // this.state.series = resp.data.results;
+            // console.log(this.state.series);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    Search() {
+      let input = this.state.searchInput;
+
+      if (input != "") {
+        // console.log(input);
+
+        this.callApi(input, true);
+
+        this.callApi(input, false);
+        // this.state.createResults();
+      } else {
+        console.log("OPS: c'e' statro un problema!");
+      }
+    },
+  },
 };
 </script>
 
@@ -12,19 +68,20 @@ export default {
         src="../assets/img/logo-no-background.png"
         alt=""
       />
-      <a class="nav-item nav-link active" href="#" aria-current="page"
+      <a class="nav-item nav-link active bordo" href="#" aria-current="page"
         >Home <span class="visually-hidden">(current)</span></a
       >
-      <a class="nav-item nav-link px-3" href="#">Serie TV</a>
-      <a class="nav-item nav-link px-3" href="#">Serie TV</a>
-      <a class="nav-item nav-link px-3" href="#">Film</a>
-      <a class="nav-item nav-link px-3" href="#">Nuovi e Popolari</a>
-      <a class="nav-item nav-link px-3" href="#">La mia Lista</a>
-      <a class="nav-item nav-link px-3" href="#">Sfoglia per lingua</a>
+      <a class="nav-item nav-link px-3 active" href="#">Serie TV</a>
+      <a class="nav-item nav-link px-3 active" href="#">Serie TV</a>
+      <a class="nav-item nav-link px-3 active" href="#">Film</a>
+      <a class="nav-item nav-link px-3 active" href="#">Nuovi e Popolari</a>
+      <a class="nav-item nav-link px-3 active" href="#">La mia Lista</a>
+      <a class="nav-item nav-link px-3 active" href="#">Sfoglia per lingua</a>
     </div>
     <div class="col-4 d-flex align-items-center text-light">
       <div class="input-group d-flex w-75 me-4">
         <input
+          v-model="state.searchInput"
           class="form-control"
           type="search"
           placeholder="Cerca qui film, serie TV..."
@@ -54,18 +111,25 @@ export default {
         alt=""
         class="w-s ms-1"
       />
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        fill="currentColor"
-        class="bi bi-caret-down-fill ms-1"
-        viewBox="0 0 20 20"
-      >
-        <path
-          d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"
-        />
-      </svg>
+      <div class="dropdown">
+        <button
+          class="btn btn-secondary dropdown-toggle"
+          type="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        ></button>
+        <ul class="dropdown-menu">
+          <li><button class="dropdown-item" type="button">Action</button></li>
+          <li>
+            <button class="dropdown-item" type="button">Another action</button>
+          </li>
+          <li>
+            <button class="dropdown-item" type="button">
+              Something else here
+            </button>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -79,5 +143,14 @@ svg {
   width: 9%;
   border-radius: 14%;
   margin-right: 10px;
+}
+
+a.nav-link {
+  text-transform: uppercase;
+  padding: 1rem 0.5rem;
+
+  &.active:hover {
+    border-bottom: 1px solid white;
+  }
 }
 </style>

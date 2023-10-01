@@ -1,8 +1,7 @@
 import { reactive } from "vue";
 
 export const state = reactive({
-  // movies: null,
-  // series: null,
+  searchInput: "",
   results: [],
 
   addToResult(arrayToAdd, isMovie) {
