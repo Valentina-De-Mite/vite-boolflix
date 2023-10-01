@@ -2,6 +2,7 @@
 import { state } from "./state.js";
 import axios from "axios";
 import movieCard from "./components/movieCard.vue";
+import AppHeader from "./components/AppHeader.vue";
 
 export default {
   name: "App",
@@ -63,18 +64,15 @@ export default {
 
   components: {
     movieCard,
+    AppHeader,
   },
 };
 </script>
 
 <template>
+  <AppHeader></AppHeader>
   <body>
     <div class="container">
-      <div class="searchbox py-5">
-        <input class="w-50 ps-2" type="search" v-model="state.searchInput" />
-        <button @click="Search">Cerca</button>
-      </div>
-
       <div class="row row-cols-2 row-cols-md-4 g-4 my-5">
         <movieCard
           v-for="result in state.results"
